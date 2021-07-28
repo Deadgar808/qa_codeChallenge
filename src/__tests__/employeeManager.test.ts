@@ -9,34 +9,48 @@ describe("Employee Manager", () => {
   afterAll(async () => {
     await em.quit();
   });
-  it("can add a new employee", async () => {
+  test("can add a new employee", async () => {
     await em.addEmployee();
     await em.selectEmployeeByName("New Employee");
     await em.editEmployee({
-      name: "test person",
+      name: "Bill Murray",
       phone: "1234567890",
-      title: "test result",
+      title: "Actor",
     });
     await em.saveChanges();
-    await em.selectEmployeeByName("Dollie Berry");
-    await em.selectEmployeeByName("test person");
+    await em.selectEmployeeByName("Bill Murray");
     let employee = await em.getEmployeeInfo();
-    expect(employee.name).toEqual("test person");
+    expect(employee.name).toEqual("Bill Murray");
     expect(employee.phone).toEqual("1234567890");
-    expect(employee.title).toEqual("test result");
+    expect(employee.title).toEqual("Actor");
   });
-  it("can edit an existing employee", async () => {
+  test("can edit an existing employee", async () => {
     await em.selectEmployeeByName("Bernice Ortiz");
-    await em.editEmployee({ title: "Grand Poobah" });
+    await em.editEmployee({
+      title: "Royal Asshat",
+    });
     await em.saveChanges();
-    await em.selectEmployeeByName("Phillip Weaver");
     await em.selectEmployeeByName("Bernice Ortiz");
     let employee = await em.getEmployeeInfo();
+    expect(employee.title).toEqual("Royal Asshat");
+  });
+  test("can edit an existing employee", async () => {
+    await em.selectEmployeeByName("Lou White");
+    await em.editEmployee({
+      name: "Louis White",
+      phone: "8727813498",
+      title: "Full-Stack Dev",
+    });
+    await em.saveChanges();
+    let employee = await em.getEmployeeInfo();
+    expect(employee.name).toEqual("Louis White");
+    expect(employee.phone).toEqual("8727813498");
+    expect(employee.title).toEqual("Full-Stack Dev");
     expect(employee).toEqual({
-      id: 1,
-      name: "Bernice Ortiz",
-      phone: "4824931093",
-      title: "Grand Poobah",
+      id: 8,
+      name: "Louis White",
+      phone: "8727813498",
+      title: "Full-Stack Dev",
     });
   });
 });
